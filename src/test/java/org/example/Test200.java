@@ -1,9 +1,8 @@
 package org.example;
 
 import io.restassured.RestAssured;
-import junit.framework.Assert;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.function.Executable;
+import io.restassured.response.ValidatableResponse;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -13,48 +12,22 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class Test200 {
 
+    ValidatableResponse var;
     public void test200(String pun, String val) {
-
-        RestAssured
-                .given()
-                .baseUri("https://reqres.in")
-                .when()
-                .log().all()
-                .get("/api/users/{id}", 2)
-                .then()
-                .log().all()
-                .body(("data." + pun), equalTo(val));
+        var.body(("data." + pun), equalTo(val));
     }
 
     public void test200(String pun, int val) {
-
-        RestAssured
-                .given()
-                .baseUri("https://reqres.in")
-                .when()
-                .log().all()
-                .get("/api/users/{id}", 2)
-                .then()
-                .log().all()
-                .body(("data." + pun), equalTo(val));
+        var.body(("data." + pun), equalTo(val));
     }
 
     public void test200(String pun) {
-
-        RestAssured
-                .given()
-                .baseUri("https://reqres.in")
-                .when()
-                .log().all()
-                .get("/api/users/{id}", 2)
-                .then()
-                .log().all()
-                .body(("data." + pun), not(equalTo(null)));
+        var.body(("data." + pun), not(equalTo(null)));
     }
-
+    @BeforeClass
     public void test200() {
 
-        RestAssured
+       var = RestAssured
                 .given()
                     .baseUri("https://reqres.in")
                 .when()
@@ -76,7 +49,6 @@ public class Test200 {
     @Test
     public void test2(){
 
-        test200();
         assertAll("тесты:",
                 ()->  test200("id",  2),
                 ()-> test200("email",  "janet.weaver@reqres.in"),
@@ -90,7 +62,6 @@ public class Test200 {
     @Test
     public void test3(){
 
-        test200();
         assertAll("тесты:",
                 ()->  test200("id"),
                 ()-> test200("email"),
